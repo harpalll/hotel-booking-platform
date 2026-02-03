@@ -82,3 +82,13 @@ export const login = asyncHandler(async (req, res) => {
     .status(200)
     .json(new ApiResponse(true, { token, user: jwtPayload }, null));
 });
+
+export const me = asyncHandler(async (req, res) => {
+  const { user } = req;
+
+  if (!user) {
+    return res.status(401).json(new ApiResponse(false, null, "Unauthorized"));
+  }
+
+  return res.status(200).json(new ApiResponse(true, user, null));
+});
