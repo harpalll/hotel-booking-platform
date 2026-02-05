@@ -2,12 +2,13 @@ import express from "express";
 import { ApiResponse } from "./utils/ApiResponse";
 
 // * ROUTES
-import { authRouter } from "./routes/index";
+import { authRouter, hotelRouter } from "./routes/index";
 
 const app = express();
 app.use(express.json());
 
 app.use("/api/auth", authRouter);
+app.use("/api/hotels", hotelRouter);
 
 app.get("/api/healthCheck", (req, res) => {
   res

@@ -35,14 +35,16 @@ model User {
 }
 
 model Hotel {
-  id           String  @id @default(uuid())
+  id           String   @id @default(uuid())
   name         String
   description  String
   city         String
   country      String
-  amenities    Json[]  @default([])
-  rating       Decimal @default(0.0)
-  totalReviews Int     @default(0)
+  amenities    Json[]   @default([])
+  rating       Decimal  @default(0.0)
+  totalReviews Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 
   //relations
   ownerId  String
@@ -106,4 +108,7 @@ model Review {
   hotel     Hotel   @relation(fields: [hotelId], references: [id])
   bookingId String
   booking   Booking @relation(fields: [bookingId], references: [id])
+
+  //Contraints
+  @@unique([userId, bookingId]) // One review per booking
 }
