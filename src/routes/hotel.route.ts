@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { allowedRoles } from "../middlewares/role.middleware";
 import { authMiddleware } from "../middlewares/auth.middleware";
-import { createHotel } from "../controllers/hotel.controller";
+import { addRoomToHotel, createHotel, getHotels } from "../controllers/hotel.controller";
 import { validateData } from "../middlewares/validation.middleware";
 import {
   addRoomToHotelSchema,
@@ -10,6 +10,8 @@ import {
 
 const router = Router();
 
+router.get("/", authMiddleware, getHotels)
+
 router.post(
   "/",
   authMiddleware,
@@ -17,12 +19,13 @@ router.post(
   validateData(createHotelSchema),
   createHotel,
 );
-// router.post(
-//   "/:hotelid/rooms",
-//   authMiddleware,
-//   allowedRoles(["owner"]),
-//   validateData(addRoomToHotelSchema),
-//   addRoomToHotel,
-// );
+router.post(
+  "/:hotelId/rooms",
+  authMiddleware,
+  allowedRoles(["owner"]),
+  validateData(addRoomToHotelSchema),
+  addRoomToHotel,
+);
+
 
 export default router;
