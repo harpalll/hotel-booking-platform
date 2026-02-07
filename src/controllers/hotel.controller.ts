@@ -137,3 +137,37 @@ export const getHotels = asyncHandler(async (req, res) => {
     .json(new ApiResponse(true, finalList, null));
 });
 
+export const getRoomsByHotels = asyncHandler(async (req, res) => {
+  const { hotelId } = req.params;
+  const hotel = await prisma.hotel.findFirst({
+    where: { id: hotelId?.toString() },
+    select: {
+      id: true,
+      name: true,
+      ownerId: true,
+      description: true,
+      city: true,
+      country: true,
+      amenities: true,
+      rating: true,
+      totalReviews: true,
+      rooms: {
+        select: {
+          id: true,
+          roomNumber: true,
+          roomType: true,
+          pricePerNight: true,
+          maxOccupancy: true,
+        },
+      },
+    },
+  });
+
+  if (!hotel) {
+    return res
+      .status(StatusCodes.NOT_FOUND)
+      .json(new ApiResponse(false, null, "HOTEL_NOT_FOUND"));
+  }
+
+  return res.status(StatusCodes.OK).json(new ApiResponse(true, hotel, null));
+});
